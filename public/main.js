@@ -1,4 +1,4 @@
-const {BOT_TOKEN,GOOGLE_SCRIPT_URL} = require('./config.json');
+const {BOT_TOKEN,GOOGLE_SCRIPT_URL} = require('../config.json');
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 const express = require('express');
