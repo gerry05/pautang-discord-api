@@ -1,13 +1,12 @@
 // Import packages
-const express = require("express");
-const apiRoute = require("./routes/api");
-
+import express from 'express';
+import apiRouter from './routes/api.js';
 // Middlewares
 const app = express();
 app.use(express.json());
 
 // Routes
-app.use("/api", apiRoute);
+app.use("/api", apiRouter);
 
 // connection
 const port = process.env.PORT || 9001;
