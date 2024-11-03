@@ -2,9 +2,9 @@
   "name": "pautang_api",
   "version": "1.0.0",
   "description": "",
-  "main": "public/main.js",
+  "main": "public/index.js",
   "scripts": {
-    "start": "node public/main.js",
+    "start": "node public/index.js",
     "build": "echo 'Building project...' && exit 0",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
