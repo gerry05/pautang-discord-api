@@ -2,7 +2,7 @@ const {BOT_TOKEN,GOOGLE_SCRIPT_URL} = require('../config.json');
 const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 const express = require('express');
-const app = express();
+const router = express.Router();
 
 const client = new Client({
   intents: [
@@ -17,8 +17,11 @@ const ALLOWED_CHANNELS = ['1302207599361654794']; // Add your channel IDs here
 
 // Express server setup for testing and handling requests
 
-app.get('/', (req, res) => {
-  res.send('Bot is running!');
+router.get('/', async (req, res,next) => {
+  return res.status(200).json({
+    title: "Pautang BOT",
+    message: "Bot is running",
+  });
 });
 
 
@@ -41,3 +44,7 @@ client.on('messageCreate', async message => {
 });
 
 client.login(BOT_TOKEN);
+
+module.exports = router;
+
+
