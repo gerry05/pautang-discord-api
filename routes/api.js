@@ -32,7 +32,8 @@ router.get('/', async (req, res,next) => {
 
 
 client.on('messageCreate', async message => {
-  console.log('Message received: ', message.content);
+  //console.log('Message received: ', message.content);
+  console.log('NEW MESSAGE RECEIVED');
 
   if (!ALLOWED_CHANNELS.includes(message.channel.id)) return; // Restrict to specific channels
 
