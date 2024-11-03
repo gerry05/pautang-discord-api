@@ -49,6 +49,22 @@ client.on('messageCreate', async message => {
   }
 });
 
+const url = `https://pautang-api.onrender.com`; // Replace with your Render URL
+const interval = 30000; // Interval in milliseconds (30 seconds)
+
+function reloadWebsite() {
+  axios.get(url)
+    .then(response => {
+      console.log(`Reloaded at ${new Date().toISOString()}: Status Code ${response.status}`);
+    })
+    .catch(error => {
+      console.error(`Error reloading at ${new Date().toISOString()}:`, error.message);
+    });
+}
+
+
+setInterval(reloadWebsite, interval);
+
 client.login(process.env.BOT_TOKEN);
 
 export default router
