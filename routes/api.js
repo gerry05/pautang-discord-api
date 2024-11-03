@@ -49,7 +49,7 @@ client.on('messageCreate', async message => {
   }
 });
 
-const url = `https://pautang-api.onrender.com`; // Replace with your Render URL
+const url = `https://pautang-api.onrender.com/api`; // Replace with your Render URL
 const interval = 30000; // Interval in milliseconds (30 seconds)
 
 function reloadWebsite() {
