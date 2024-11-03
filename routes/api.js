@@ -15,7 +15,7 @@ const client = new Client({
 });
 
 
-const ALLOWED_CHANNELS = ['1302207599361654794']; // Add your channel IDs here
+const ALLOWED_CHANNELS = ['1301808059617640539','1302539394414149712']; // Add your channel IDs here
 
 // Express server setup for testing and handling requests
 
