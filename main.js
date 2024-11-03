@@ -16,15 +16,12 @@ const client = new Client({
 const ALLOWED_CHANNELS = ['1302207599361654794']; // Add your channel IDs here
 
 // Express server setup for testing and handling requests
-const PORT = 3000;
 
 app.get('/', (req, res) => {
   res.send('Bot is running!');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+
 
 client.on('messageCreate', async message => {
   console.log('Message received: ', message.content);
