@@ -14,8 +14,11 @@ const client = new Client({
   ]
 });
 
+// 539 = november
+// 712 = check-balance
+// 794 = test
+const ALLOWED_CHANNELS = ['1301808059617640539','1302539394414149712','1302207599361654794']; // Add your channel IDs here    
 
-const ALLOWED_CHANNELS = ['1301808059617640539','1302539394414149712']; // Add your channel IDs here
 
 // Express server setup for testing and handling requests
 
