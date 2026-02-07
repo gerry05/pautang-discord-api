@@ -10,8 +10,10 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.DirectMessages
+  ],
+  allowedMentions: { parse: ['users', 'roles'] }
 });
 
 console.log('Discord client initialized');
@@ -84,6 +86,10 @@ client.on('shardError', error => {
   console.error('❌ Discord shard error:', error);
 });
 
+client.on('warn', message => {
+  console.warn('⚠️ Discord.js warning:', message);
+});
+
 const url = `https://pautang-api.onrender.com/api`; // Replace with your Render URL
 const interval = 30000; // Interval in milliseconds (30 seconds)
 
@@ -105,6 +111,7 @@ if (!process.env.BOT_TOKEN) {
   console.error('❌ BOT_TOKEN is not set in environment variables');
 } else {
   console.log('✓ BOT_TOKEN found in environment');
+  console.log(`Token preview: ${process.env.BOT_TOKEN.substring(0, 10)}...`);
   console.log('Attempting to log in Discord bot...');
   
   client.login(process.env.BOT_TOKEN)
@@ -112,8 +119,11 @@ if (!process.env.BOT_TOKEN) {
       console.log('✓ Login promise resolved');
     })
     .catch(error => {
-      console.error('❌ Failed to login Discord bot:', error.message);
-      console.error('Full error:', error);
+      console.error('❌ Failed to login Discord bot');
+      console.error('Error:', error.message);
+      if (error.message.includes('Invalid token') || error.code === 'TokenInvalid') {
+        console.error('⚠️ Token appears invalid. Check Discord Developer Portal for correct token.');
+      }
     });
 }
 
