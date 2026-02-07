@@ -29,7 +29,26 @@ router.get('/', async (req, res,next) => {
   });
 });
 
-
+router.get('/balance', async (req, res) => {
+  const name = req.query.name;
+  
+  if (!name) {
+    return res.status(400).json({
+      error: "Name parameter is required",
+      message: "Please provide a name query parameter (e.g., /balance?name=anna)"
+    });
+  }
+  
+  try {
+    const response = await axios.get(`${process.env.GOOGLE_SCRIPT_URL}?name=${name}`);
+    return res.status(200).json(response.data);
+  } catch (error) {
+    return res.status(500).json({
+      error: 'There was an error retrieving the balance.',
+      message: error.message
+    });
+  }
+});
 
 client.on('messageCreate', async message => {
   //console.log('Message received: ', message.content);
