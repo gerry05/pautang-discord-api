@@ -4,6 +4,16 @@ import { Client, GatewayIntentBits } from 'discord.js';
 import axios from 'axios';
 
 dotenv.config();
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', error => {
+  console.error('❌ UNHANDLED REJECTION:', error);
+});
+
+process.on('uncaughtException', error => {
+  console.error('❌ UNCAUGHT EXCEPTION:', error);
+});
+
 const router = express.Router();
 
 const client = new Client({
@@ -104,6 +114,28 @@ client.on('debug', info => {
   }
 });
 
+// Test if ANY events are firing
+let eventsFired = false;
+client.on('invalidated', () => {
+  eventsFired = true;
+  console.log('⚠️ CLIENT INVALIDATED');
+});
+
+client.on('rateLimited', info => {
+  eventsFired = true;
+  console.error('⚠️ RATE LIMITED:', info);
+});
+
+// Timeout to check if client fired any events
+setTimeout(() => {
+  if (!eventsFired && !client.isReady()) {
+    console.error('\n❌ CRITICAL: Bot client not emitting any events - possible issues:');
+    console.error('   - Bot user might be running another instance');
+    console.error('   - Discord API connectivity issue from the server');
+    console.error('   - Firewall/network blocking Discord API');
+  }
+}, 10000);
+
 const url = `https://pautang-api.onrender.com/api`; // Replace with your Render URL
 const interval = 30000; // Interval in milliseconds (30 seconds)
 
@@ -121,25 +153,32 @@ function reloadWebsite() {
 setInterval(reloadWebsite, interval);
 
 // Log bot token check
+console.log('\n======== DISCORD BOT INITIALIZATION ========');
 if (!process.env.BOT_TOKEN) {
   console.error('❌ BOT_TOKEN is not set in environment variables');
+  console.error('Exiting...');
+  process.exit(1);
 } else {
   console.log('✓ BOT_TOKEN found in environment');
   console.log(`Token preview: ${process.env.BOT_TOKEN.substring(0, 50)}...`);
   console.log('Attempting to log in Discord bot...');
   
-  client.login(process.env.BOT_TOKEN)
+  const loginPromise = client.login(process.env.BOT_TOKEN);
+  
+  loginPromise
     .then(() => {
-      console.log('✓ Login promise resolved');
+      console.log('✓ Login promise resolved successfully');
     })
     .catch(error => {
-      console.error('❌ Failed to login Discord bot');
-      console.error('Error:', error.message);
-      if (error.message.includes('Invalid token') || error.code === 'TokenInvalid') {
-        console.error('⚠️ Token appears invalid. Check Discord Developer Portal for correct token.');
-      }
+      console.error('❌ Login promise REJECTED');
+      console.error('Error message:', error.message);
+      console.error('Error code:', error.code);
+      console.error('Full error:', JSON.stringify(error, null, 2));
     });
+  
+  console.log('Login call executed. Waiting for connection...');
 }
+console.log('==========================================\n');
 
 // Check bot connection status after 5 seconds
 setTimeout(() => {
