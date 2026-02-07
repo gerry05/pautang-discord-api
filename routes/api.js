@@ -90,6 +90,20 @@ client.on('warn', message => {
   console.warn('⚠️ Discord.js warning:', message);
 });
 
+client.on('disconnect', () => {
+  console.warn('⚠️ Bot disconnected from Discord');
+});
+
+client.on('reconnecting', () => {
+  console.log('🔄 Bot is reconnecting to Discord...');
+});
+
+client.on('debug', info => {
+  if (info.includes('Heartbeat') || info.includes('Connecting to')) {
+    console.log(`[DEBUG] ${info}`);
+  }
+});
+
 const url = `https://pautang-api.onrender.com/api`; // Replace with your Render URL
 const interval = 30000; // Interval in milliseconds (30 seconds)
 
@@ -132,9 +146,28 @@ setTimeout(() => {
   if (client.isReady()) {
     console.log('✓ Bot is connected and ready');
   } else {
-    console.error('❌ Bot is not ready after 5 seconds. Check your BOT_TOKEN and Discord permissions.');
+    console.error('❌ Bot is not ready after 5 seconds. Checking status...');
+    console.log(`   - Client status: ${client.status}`);
+    console.log(`   - isReady: ${client.isReady()}`);
+    console.log(`   - Trying to diagnose...`);
   }
 }, 5000);
+
+// Check again after 15 seconds with more detail
+setTimeout(() => {
+  console.log('\n=== BOT STATUS CHECK (15 seconds) ===');
+  console.log(`Ready Status: ${client.isReady()}`);
+  console.log(`Client Status Code: ${client.status}`);
+  console.log(`Guilds Count: ${client.guilds.cache.size}`);
+  if (!client.isReady()) {
+    console.error('❌ Bot still not ready - Connection may be failing');
+    console.error('Ensure:');
+    console.error('  1. All intents are enabled in Discord Developer Portal');
+    console.error('  2. Bot is added to your Discord server');
+    console.error('  3. Token is correct and recently regenerated');
+  }
+  console.log('===================================\n');
+}, 15000);
 
 export default router
 
