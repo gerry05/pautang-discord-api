@@ -107,10 +107,24 @@ if (!process.env.BOT_TOKEN) {
   console.log('✓ BOT_TOKEN found in environment');
   console.log('Attempting to log in Discord bot...');
   
-  client.login(process.env.BOT_TOKEN).catch(error => {
-    console.error('❌ Failed to login Discord bot:', error.message);
-  });
+  client.login(process.env.BOT_TOKEN)
+    .then(() => {
+      console.log('✓ Login promise resolved');
+    })
+    .catch(error => {
+      console.error('❌ Failed to login Discord bot:', error.message);
+      console.error('Full error:', error);
+    });
 }
+
+// Check bot connection status after 5 seconds
+setTimeout(() => {
+  if (client.isReady()) {
+    console.log('✓ Bot is connected and ready');
+  } else {
+    console.error('❌ Bot is not ready after 5 seconds. Check your BOT_TOKEN and Discord permissions.');
+  }
+}, 5000);
 
 export default router
 
