@@ -160,23 +160,24 @@ if (!process.env.BOT_TOKEN) {
   process.exit(1);
 } else {
   console.log('✓ BOT_TOKEN found in environment');
-  console.log(`Token preview: ${process.env.BOT_TOKEN.substring(0, 50)}...`);
-  console.log('Attempting to log in Discord bot...');
+  console.log(`Token preview: ${process.env.BOT_TOKEN.substring(0, 20)}...${process.env.BOT_TOKEN.substring(process.env.BOT_TOKEN.length - 20)}`);
+  console.log(`Token length: ${process.env.BOT_TOKEN.length}`);
+  console.log('Token format valid:', /^[MN][A-Z\d_-]{23,25}\.[A-Z\d_-]{6,7}\.[A-Z\d_-]{27}$/.test(process.env.BOT_TOKEN) ? '✓' : '❌');
+  console.log('Attempting to log in Discord bot...\n');
   
   const loginPromise = client.login(process.env.BOT_TOKEN);
+  console.log('✓ client.login() call executed');
   
   loginPromise
     .then(() => {
-      console.log('✓ Login promise resolved successfully');
+      console.log('✓✓✓ Login promise RESOLVED - Bot is connecting! ✓✓✓');
     })
     .catch(error => {
       console.error('❌ Login promise REJECTED');
       console.error('Error message:', error.message);
       console.error('Error code:', error.code);
-      console.error('Full error:', JSON.stringify(error, null, 2));
+      console.error('Stack:', error.stack);
     });
-  
-  console.log('Login call executed. Waiting for connection...');
 }
 console.log('==========================================\n');
 
