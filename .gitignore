@@ -1,2 +1,2 @@
 .vercel
-.env
+.envconfig.json

@@ -1,0 +1,4 @@
+{
+    "BOT_TOKEN": "your-discord-bot-token-here",
+    "GOOGLE_SCRIPT_URL": "your-google-script-url-here"
+}
