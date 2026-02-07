@@ -14,6 +14,8 @@ const client = new Client({
   ]
 });
 
+console.log('Discord client initialized');
+
 // 1301808059617640539 = november
 // 1302539394414149712 = check-balance
 // 1302207599361654794 = test
@@ -68,6 +70,20 @@ client.on('messageCreate', async message => {
   }
 });
 
+client.on('ready', () => {
+  console.log(`✓ Discord Bot logged in as: ${client.user.tag}`);
+  console.log(`✓ Bot status: ONLINE`);
+  console.log(`✓ Bot is ready and listening for messages`);
+});
+
+client.on('error', error => {
+  console.error('❌ Discord client error:', error);
+});
+
+client.on('shardError', error => {
+  console.error('❌ Discord shard error:', error);
+});
+
 const url = `https://pautang-api.onrender.com/api`; // Replace with your Render URL
 const interval = 30000; // Interval in milliseconds (30 seconds)
 
@@ -84,7 +100,17 @@ function reloadWebsite() {
 
 setInterval(reloadWebsite, interval);
 
-client.login(process.env.BOT_TOKEN);
+// Log bot token check
+if (!process.env.BOT_TOKEN) {
+  console.error('❌ BOT_TOKEN is not set in environment variables');
+} else {
+  console.log('✓ BOT_TOKEN found in environment');
+  console.log('Attempting to log in Discord bot...');
+  
+  client.login(process.env.BOT_TOKEN).catch(error => {
+    console.error('❌ Failed to login Discord bot:', error.message);
+  });
+}
 
 export default router
 
