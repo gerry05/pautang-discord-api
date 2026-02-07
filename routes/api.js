@@ -111,7 +111,7 @@ if (!process.env.BOT_TOKEN) {
   console.error('❌ BOT_TOKEN is not set in environment variables');
 } else {
   console.log('✓ BOT_TOKEN found in environment');
-  console.log(`Token preview: ${process.env.BOT_TOKEN.substring(0, 10)}...`);
+  console.log(`Token preview: ${process.env.BOT_TOKEN.substring(0, 50)}...`);
   console.log('Attempting to log in Discord bot...');
   
   client.login(process.env.BOT_TOKEN)
