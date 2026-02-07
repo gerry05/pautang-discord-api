@@ -160,13 +160,18 @@ if (!process.env.BOT_TOKEN) {
   process.exit(1);
 } else {
   console.log('✓ BOT_TOKEN found in environment');
-  console.log(`Token preview: ${process.env.BOT_TOKEN.substring(0, 20)}...${process.env.BOT_TOKEN.substring(process.env.BOT_TOKEN.length - 20)}`);
-  console.log(`Token length: ${process.env.BOT_TOKEN.length}`);
-  console.log('Token format valid:', /^[MN][A-Z\d_-]{23,25}\.[A-Z\d_-]{6,7}\.[A-Z\d_-]{27}$/.test(process.env.BOT_TOKEN) ? '✓' : '❌');
+  const token = process.env.BOT_TOKEN;
+  console.log(`Token preview: ${token.substring(0, 20)}...${token.substring(token.length - 20)}`);
+  console.log(`Token length: ${token.length}`);
+  
+  // Token should have 2 dots (format: user.timestamp.hmac) and be around 72 chars
+  const hasValidFormat = token.includes('.') && token.split('.').length === 3 && token.length > 50;
+  console.log('Token format looks valid:', hasValidFormat ? '✓' : '⚠️ (but trying anyway)');
+  
   console.log('Attempting to log in Discord bot...\n');
   
-  const loginPromise = client.login(process.env.BOT_TOKEN);
-  console.log('✓ client.login() call executed');
+  const loginPromise = client.login(token);
+  console.log('✓ client.login() call executed - waiting for connection handshake...');
   
   loginPromise
     .then(() => {
@@ -176,7 +181,6 @@ if (!process.env.BOT_TOKEN) {
       console.error('❌ Login promise REJECTED');
       console.error('Error message:', error.message);
       console.error('Error code:', error.code);
-      console.error('Stack:', error.stack);
     });
 }
 console.log('==========================================\n');
